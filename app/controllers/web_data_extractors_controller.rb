@@ -1,0 +1,3 @@
+class WebDataExtractorsController < ApplicationController
+  
+end
