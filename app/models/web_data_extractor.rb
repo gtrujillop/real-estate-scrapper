@@ -15,16 +15,24 @@ class WebDataExtractor
   end
   private :mechanize
 
+  def text_processor(raw_data)
+    TextProcessor.new(raw_data)
+  end
+  private :text_processor
+
   def extract_details(url)
     details = []
     page = mechanize.get(url)
     links = page.links_with(text: 'Ver completo')
     links.each do |link|
       raw_data = link.click
-      details.push({ raw_data.uri.to_s => raw_data.search('.col-izk div').first.text })
+      processor = text_processor(raw_data)
+      details.push({ raw_data.uri.to_s => processor.get_text })
     end
     details
   end
+
+
 
   def print_found_data
     web_data_from_urls.each do |detail|
